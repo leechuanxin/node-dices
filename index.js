@@ -25,6 +25,14 @@ const handleRoll = (consoleStr) => {
   }
 };
 
+const handleAverage = (err, obj) => {
+  if (!err) {
+    const { rolls } = obj;
+    const average = rolls.reduce((a, b) => a + b) / rolls.length;
+    console.log(`Average is ${average}.`);
+  }
+};
+
 const init = () => {
   const obj = {
     rolls: [],
@@ -44,10 +52,18 @@ const roll = () => {
   jsonFileStorage.add(JSON_FILE, ROLLS_KEY, randomDiceNumber, handleRoll);
 };
 
+const average = () => {
+  jsonFileStorage.read(JSON_FILE, handleAverage);
+};
+
 if (process.argv[2] === 'init') {
   init();
 } else if (process.argv[2] === 'clear') {
   clear();
 } else if (process.argv[2] === 'roll') {
   roll();
+} else if (process.argv[2] === 'average') {
+  average();
+} else {
+  console.log('Please enter a valid input: node index.js [init|clear|roll|average]');
 }
